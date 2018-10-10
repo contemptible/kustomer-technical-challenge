@@ -57,8 +57,7 @@ function processData(csv) {
     customerObject["emails"] = [ { "type": "home", "email": customer[2] }];
     customerObject["birthdayAt"] = customer[3];
     customerObject["phones"] = [ { "type": "home", "phone": customer[4] }, { "type": "work", "email": customer[5] }];
-
-    // this is where customerType will be
+    customerObject["custom"] = [ { "customer type": customer[6] }];
 
     customerArray.push(customerObject);
   });
@@ -72,7 +71,8 @@ function processData(csv) {
     "method": "POST",
     "headers": {
       "authorization": "Bearer " + BEARER_TOKEN,
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Access-Control-Allow-Origin": "*"
     },
     "processData": false,
     "data": customerArray[0]
@@ -81,6 +81,5 @@ function processData(csv) {
   $.ajax(settings).done(function(response) {
     console.log("SUCCESS: ", response);
   });
-
 
 }
