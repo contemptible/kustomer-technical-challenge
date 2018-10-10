@@ -1,4 +1,4 @@
-// CSV importing code obtained from the following article:
+// CSV importing code adapted from the following article:
 // https://mounirmesselmeni.github.io/2012/11/20/reading-csv-file-with-javascript-and-html5-file-api/
 
  function importDatabase(file) {
@@ -34,7 +34,7 @@ function errorHandler(evt) {
 
 // clean this up
 function processData(csv) {
-  // split the csv into an array where each line is one element
+  // splitting the csv into an array where each line is one element
   let allTextLines = csv.split(/\r\n|\n/);
   let lines = [];
 
@@ -65,15 +65,21 @@ function processData(csv) {
 
   // attempting to send the data to the kustomer API
 
-  $.ajax({
-    url: "https://api.kustomerapp.com/v1/customers",
-    contentType: 'application/json',
-    headers: { "Authorization": "Bearer " + BEARER_TOKEN },
-    method: "POST",
-    data: customerArray[0], // just the first user as a test
-    success: function(json) {
-        console.log("success", json);
-    }
+  let settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "https://api.kustomerapp.com/v1/customers",
+    "method": "POST",
+    "headers": {
+      "authorization": "Bearer " + BEARER_TOKEN,
+      "content-type": "application/json"
+    },
+    "processData": false,
+    "data": customerArray[0]
+  }
+
+  $.ajax(settings).done(function(response) {
+    console.log("SUCCESS: ", response);
   });
 
 }
