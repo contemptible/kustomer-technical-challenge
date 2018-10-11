@@ -9,7 +9,6 @@
   }
 }
 
-
 function unpackToArray(fileToRead) {
   let reader = new FileReader();
 
@@ -18,12 +17,10 @@ function unpackToArray(fileToRead) {
   reader.onerror = errorHandler;
 }
 
-
 function loadHandler(event) {
   let csv = event.target.result;
   processData(csv);
 }
-
 
 function errorHandler(evt) {
   if(evt.target.error.name == "NotReadableError") {
@@ -31,8 +28,6 @@ function errorHandler(evt) {
   }
 }
 
-
-// clean this up
 function processData(csv) {
   // splitting the csv into an array where each line is one element
   let allTextLines = csv.split(/\r\n|\n/);
@@ -61,25 +56,27 @@ function processData(csv) {
 
     customerArray.push(customerObject);
   });
+  sendToKustomer(customerArray);
+}
 
-  // attempting to send the data to the kustomer API
-
+function sendToKustomer(customerArray) {
   let settings = {
     "async": true,
     "crossDomain": true,
     "url": "https://api.kustomerapp.com/v1/customers",
     "method": "POST",
     "headers": {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "*",
+      "Access-Control-Allow-Credentials": true,
       "authorization": "Bearer " + BEARER_TOKEN,
-      "content-type": "application/json",
-      "Access-Control-Allow-Origin": "*"
+      "content-type": "application/json"
     },
     "processData": false,
     "data": customerArray[0]
   }
 
   $.ajax(settings).done(function(response) {
-    console.log("SUCCESS: ", response);
+    console.log(response);
   });
-
 }
